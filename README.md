@@ -51,10 +51,6 @@ paper_agent/
 web/
   templates/
   static/
-docs/
-  agent_knowledge_guide.md
-  interview_playbook.md
-  github_upload_guide.md
 ```
 
 ## 技术栈
