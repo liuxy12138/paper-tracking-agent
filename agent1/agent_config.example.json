@@ -1,0 +1,61 @@
+{
+  "topic": "low earth orbit satellite positioning and navigation",
+  "api_key": "",
+  "paths": {
+    "base_dir": "./runtime_data",
+    "pdf_dir": "./runtime_data/pdfs",
+    "vector_dir": "./runtime_data/vectordb",
+    "report_dir": "./runtime_data/reports",
+    "metadata_path": "./runtime_data/paper_index.json",
+    "long_term_memory_path": "./runtime_data/memory/long_term_memory.json",
+    "thread_history_path": "./runtime_data/memory/thread_history.json",
+    "checkpoint_path": "./runtime_data/memory/langgraph_checkpoints.sqlite"
+  },
+  "search": {
+    "max_results": 5,
+    "relevance_threshold": 0.3,
+    "query": null,
+    "semantic_top_k": 6,
+    "query_rewrite_count": 3
+  },
+  "keywords": {
+    "core": [
+      "LEO satellite",
+      "low earth orbit",
+      "satellite positioning",
+      "satellite navigation",
+      "GNSS"
+    ],
+    "extended": [
+      "positioning",
+      "navigation",
+      "orbit",
+      "satellite",
+      "constellation"
+    ],
+    "exclude": [
+      "quantum",
+      "molecular",
+      "gene"
+    ]
+  },
+  "rag": {
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "llm_model": "glm-4-flash",
+    "chunk_size": 800,
+    "chunk_overlap": 120,
+    "max_chunks_per_paper": 60,
+    "retrieval_top_k": 6,
+    "hybrid_alpha": 0.75
+  },
+  "graph": {
+    "enable_query_rewrite": true,
+    "enable_reflection": true,
+    "max_reflection_rounds": 1,
+    "default_thread_id": "default-thread",
+    "default_user_id": "default-user",
+    "max_history_messages": 6,
+    "max_memory_items": 4,
+    "use_sqlite_checkpointer": true
+  }
+}
