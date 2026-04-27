@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ project_name }}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">LangGraph Multi-Agent Demo</p>
+        <h1>{{ project_name }}</h1>
+        <p class="subtitle">Planner / Retrieval / Analysis / Summary / Reflection</p>
+        <p class="topic">Current topic: <strong>{{ topic }}</strong></p>
+      </div>
+      <div class="hero-card">
+        <div class="hero-stat">
+          <span class="label">Thread</span>
+          <span>{{ default_thread_id }}</span>
+        </div>
+        <div class="hero-stat">
+          <span class="label">User</span>
+          <span>{{ default_user_id }}</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <section class="panel control-panel">
+        <h2>Ask the Agent</h2>
+        <label class="field">
+          <span>Question</span>
+          <textarea id="question-input" rows="6" placeholder="Ask about methods, compare papers, or request a daily brief..."></textarea>
+        </label>
+
+        <div class="grid-two">
+          <label class="field">
+            <span>Thread ID</span>
+            <input id="thread-id" value="{{ default_thread_id }}">
+          </label>
+          <label class="field">
+            <span>User ID</span>
+            <input id="user-id" value="{{ default_user_id }}">
+          </label>
+        </div>
+
+        <div class="button-row">
+          <button id="ask-btn" class="primary">Ask</button>
+          <button id="daily-btn" class="secondary">Run Daily Workflow</button>
+        </div>
+
+        <h2>Upload PDF</h2>
+        <label class="field">
+          <span>PDF File</span>
+          <input id="pdf-file" type="file" accept=".pdf">
+        </label>
+        <div class="grid-two">
+          <label class="field">
+            <span>Paper ID</span>
+            <input id="paper-id" placeholder="optional-paper-id">
+          </label>
+          <label class="field">
+            <span>Title</span>
+            <input id="paper-title" placeholder="optional title">
+          </label>
+        </div>
+        <div class="button-row">
+          <button id="upload-btn" class="secondary">Upload and Index</button>
+          <button id="graph-btn" class="ghost">Show Workflow Graph</button>
+        </div>
+      </section>
+
+      <section class="panel result-panel">
+        <div class="result-header">
+          <h2>Agent Output</h2>
+          <span id="status-pill" class="status-pill idle">Idle</span>
+        </div>
+        <article id="answer-view" class="answer-view">
+          <p class="placeholder">Results will appear here.</p>
+        </article>
+      </section>
+
+      <section class="panel detail-panel">
+        <div class="detail-block">
+          <h3>Plan</h3>
+          <pre id="plan-view">No plan yet.</pre>
+        </div>
+        <div class="detail-block">
+          <h3>Reflection</h3>
+          <pre id="reflection-view">No reflection yet.</pre>
+        </div>
+        <div class="detail-block">
+          <h3>Tool History</h3>
+          <pre id="tools-view">No tool calls yet.</pre>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
