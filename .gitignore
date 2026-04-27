@@ -1,33 +1,31 @@
-# API密钥（防止泄露）
+# Secrets
 *api_key*
 *API_KEY*
+.env
+agent_config.json
 
-# PDF文件夹（太大，不用上传）
+# Data and generated artifacts
+runtime_data/
 pdfs/
-*.pdf
-
-# 向量库文件夹（二进制文件，不用上传）
 vectordb/
 *.faiss
 *.pkl
+*.pdf
 
-# Python缓存
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
 
-# 虚拟环境
+# Virtual environments
 venv/
 env/
 .venv/
 
-# IDE配置
+# IDE
 .vscode/
 .idea/
 
-# 系统文件
+# OS files
 .DS_Store
 Thumbs.db
-
-# 每日生成的简报（可选，看你想不想展示）
-# Daily_Review_*.md
