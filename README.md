@@ -1,94 +1,173 @@
-# 论文追踪与RAG综述生成Agent
+# Paper Research Agent
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![LangChain](https://img.shields.io/badge/LangChain-RAG-green.svg)](https://www.langchain.com/)
-[![FAISS](https://img.shields.io/badge/FAISS-Vector%20DB-orange.svg)](https://github.com/facebookresearch/faiss)
-[![GLM-4](https://img.shields.io/badge/LLM-GLM--4-purple.svg)](https://open.bigmodel.cn/)
+这是一个基于 LangGraph 构建的多 Agent 文献研究工作流项目，并提供了 FastAPI + 简单前端页面用于演示。
 
-## 📖 项目简介
+项目目标是把“论文抓取 + RAG 问答”的 demo，升级成一个更接近真实 Agent 应用开发场景的系统。
 
-一套**领域可配置**的学术论文自动化处理Pipeline。每日自动爬取ArXiv最新论文，通过三层关键词过滤算法精准筛选，基于FAISS构建增量式向量知识库，调用GLM-4大模型生成结构化研究简报。
+## 项目特点
 
-> 🔧 支持通过修改配置文件快速切换研究领域（卫星导航 → 计算机视觉 → NLP）
+- 基于 LangGraph 设计多 Agent 工作流
+- 包含 `Planner / Retrieval / Analysis / Summary / Reflection` 五阶段
+- 基于 `FAISS + Sentence-Transformers` 构建本地 RAG
+- 支持 `Tool Calling`，可调用 arXiv 检索、论文下载入库、PDF 解析、语义检索等工具
+- 支持短期记忆与长期记忆
+- 支持自动反思与一次回退重试
+- 提供 FastAPI 接口和可视化演示页面
 
-## 🏗️ 系统架构
+## 系统架构
 
+```text
+用户问题
+  -> Planner
+  -> Retrieval
+      -> query rewrite
+      -> tool calling
+      -> arXiv search / PDF parse / FAISS retrieval
+  -> Analysis
+  -> Summary
+  -> Reflection
+      -> 如结果不足则回退到 Retrieval 重试
+  -> Final answer
 ```
-ArXiv爬虫 → 关键词过滤 → PDF解析（中英文自适应）→ 文本分块 
-    ↓
-FAISS向量库（增量持久化）← 多语言Embedding
-    ↓
-用户提问 / 每日定时 → RAG检索 → GLM-4生成综述 → Markdown简报
+
+## 项目结构
+
+```text
+agent_main.py
+paper_agent/
+  config.py
+  crawler.py
+  llm.py
+  logging_utils.py
+  memory.py
+  models.py
+  parser.py
+  pipeline.py
+  rag.py
+  storage.py
+  tools.py
+  webapp.py
+  workflow.py
+web/
+  templates/
+  static/
+docs/
+  agent_knowledge_guide.md
+  interview_playbook.md
+  github_upload_guide.md
 ```
 
-## ✨ 核心功能
+## 技术栈
 
-- **智能论文筛选**：核心词/扩展词/排除词三级相关性打分
-- **中英文自适应解析**：自动识别语言，提取标题、摘要、方法、结论
-- **增量向量知识库**：FAISS本地持久化，每日追加不重建
-- **多论文对比综述**：基于检索增强生成，输出核心趋势与方法对比
+- Python
+- LangGraph
+- LangChain
+- FAISS
+- FastAPI
+- Sentence-Transformers
+- GLM-4
+- ArXiv API
+- RAG
+- Tool Calling
+- Memory
+- Reflection
 
-## 🚀 快速开始
-
-### 1. 安装依赖
+## 安装依赖
 
 ```bash
-pip install arxiv langchain langchain-community langchain-huggingface faiss-cpu pypdf sentence-transformers zhipuai
+pip install -r requirements.txt
 ```
 
-### 2. 配置API Key
+## 配置方式
 
-在 `agent_main.py` 中替换你的智谱API Key：
+将 `agent_config.example.json` 复制为 `agent_config.json`，然后填写你的配置。
 
-```python
-API_KEY = "your_zhipu_api_key_here"
-```
+至少需要配置：
 
-### 3. 修改研究领域（可选）
+- `api_key`：智谱 GLM 的 API Key
 
-在 `crawler.py` 中修改 `target_keywords` 字典，切换追踪领域：
-
-```python
-self.target_keywords = {
-    "core": ["你的核心关键词"],
-    "extended": ["扩展关键词"],
-    "exclude": ["排除关键词"]
-}
-```
-
-### 4. 运行
+也可以直接使用环境变量：
 
 ```bash
-python agent_main.py
+set ZHIPU_API_KEY=your_key
 ```
 
-## 📁 目录结构
+## CLI 用法
 
-```
-agent_paper/
-├── agent_main.py          # 主程序入口
-├── crawler.py             # ArXiv爬虫 + 关键词过滤
-├── rag_system.py          # RAG系统 + 综述生成
-├── pdfs/                  # 下载的论文PDF
-├── vectordb/              # FAISS向量库持久化目录
-├── Daily_Review_*.md      # 每日生成的简报
-└── README.md
+查看配置：
+
+```bash
+python agent_main.py show-config
 ```
 
-## 📊 输出示例
+查看 LangGraph 工作流图：
 
-每日简报包含以下结构：
+```bash
+python agent_main.py show-graph
+```
 
-- **核心趋势**：今日论文共同关注的问题
-- **亮点方法**：新颖的技术或模型
-- **结论摘要**：每篇论文的核心贡献
+运行每日论文抓取与日报流程：
 
-## 🔮 后续优化方向
+```bash
+python agent_main.py run
+```
 
-- [ ] 支持更多论文源（CVPR、NeurIPS等）
-- [ ] 增加论文引用关系图谱
-- [ ] Web可视化界面
+基于当前知识库提问：
 
-## 📧 联系方式
+```bash
+python agent_main.py ask --question "对比当前低轨卫星定位相关论文的方法差异"
+```
 
-如有问题或建议，欢迎提Issue。
+启动多轮对话：
+
+```bash
+python agent_main.py chat --thread-id interview-demo --user-id demo-user
+```
+
+导入本地 PDF：
+
+```bash
+python agent_main.py ingest --file D:\\papers\\sample.pdf --paper-id local-sample
+```
+
+## Web 演示页面
+
+启动 FastAPI：
+
+```bash
+uvicorn paper_agent.webapp:app --reload
+```
+
+浏览器打开：
+
+```text
+http://127.0.0.1:8000
+```
+
+页面支持：
+
+- 向多 Agent 工作流提问
+- 运行每日工作流
+- 上传并索引本地 PDF
+- 查看工作流图
+- 展示回答、规划、反思和工具调用记录
+
+## 当前能力说明
+
+这个项目目前已经具备以下能力：
+
+1. 复杂问题分阶段执行
+2. 检索增强问答
+3. 本地知识库增量入库
+4. 工具调用
+5. 多轮对话
+6. 长短期记忆
+7. 自动反思和结果补救
+
+## 后续可优化方向
+
+- 增加更强的 reranker 提升检索质量
+- 增加更稳定的持久化 checkpointer
+- 增加数据库与用户系统
+- 增加更完整的前端页面和任务历史管理
+- 增加自动评测与可观测性能力
