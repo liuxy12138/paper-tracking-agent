@@ -1,4 +1,4 @@
-from paper_agent.parser import LanguageDetector, UniversalPaperParser
-from paper_agent.rag import UniversalPaperRAG
+from competitive_research_agent.parser import LanguageDetector, ResearchDocumentParser
+from competitive_research_agent.rag import ResearchDocumentRAG
 
-__all__ = ["LanguageDetector", "UniversalPaperParser", "UniversalPaperRAG"]
+__all__ = ["LanguageDetector", "ResearchDocumentParser", "ResearchDocumentRAG"]

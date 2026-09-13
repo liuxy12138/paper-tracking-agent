@@ -1,0 +1,4 @@
+{"id":"m001","seed_question":"请记住，我喜欢中文回答","seed_answer":"好的，后续我会优先使用中文回答。","query":"帮我总结一下当前竞品分析重点","expected_kind":"preference","expected_memory_key":"output_language","expected_substrings":["中文"]}
+{"id":"m002","seed_question":"以后回答尽量详细一点","seed_answer":"好的，之后我会提供更详细的说明。","query":"介绍一下这个方法","expected_kind":"preference","expected_memory_key":"response_detail","expected_substrings":["详细"]}
+{"id":"m003","seed_question":"以后请优先用 Markdown 格式输出","seed_answer":"收到，我会优先使用 Markdown 结构化输出。","query":"写一份分析结论","expected_kind":"preference","expected_memory_key":"output_format","expected_substrings":["Markdown"]}
+{"id":"m004","seed_question":"我研究低轨卫星定位和导航","seed_answer":"明白了，我会结合低轨卫星定位和导航背景来回答。","query":"我之前主要研究什么方向？","expected_kind":"research_interest","expected_memory_key":"","expected_substrings":["低轨卫星","定位","导航"]}

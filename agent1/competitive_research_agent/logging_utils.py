@@ -18,7 +18,6 @@ def configure_logging(level: int = logging.INFO) -> None:
         "huggingface_hub",
         "sentence_transformers",
         "transformers",
-        "arxiv",
     ):
         logging.getLogger(noisy_logger).setLevel(logging.WARNING)
 

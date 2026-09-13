@@ -1,0 +1,34 @@
+[
+  {
+    "document_id": "cursor_product_brief",
+    "title": "Cursor Product Brief - Evaluation Fixture",
+    "file_path": "evals/documents/cursor_product_brief.md",
+    "company": "Cursor",
+    "document_type": "product_brief",
+    "topics": ["agent workflow", "repository context", "pricing", "target users"]
+  },
+  {
+    "document_id": "github_copilot_product_brief",
+    "title": "GitHub Copilot Product Brief - Evaluation Fixture",
+    "file_path": "evals/documents/github_copilot_product_brief.md",
+    "company": "GitHub",
+    "document_type": "product_brief",
+    "topics": ["IDE integration", "code completion", "enterprise governance", "pricing"]
+  },
+  {
+    "document_id": "windsurf_product_brief",
+    "title": "Windsurf Product Brief - Evaluation Fixture",
+    "file_path": "evals/documents/windsurf_product_brief.md",
+    "company": "Windsurf",
+    "document_type": "product_brief",
+    "topics": ["agent workflow", "developer experience", "pricing", "limitations"]
+  },
+  {
+    "document_id": "ai_coding_market_landscape",
+    "title": "AI Coding Assistant Market Landscape - Evaluation Fixture",
+    "file_path": "evals/documents/ai_coding_market_landscape.md",
+    "company": "",
+    "document_type": "market_report",
+    "topics": ["market trends", "competitive landscape", "buyer criteria", "risks"]
+  }
+]
