@@ -38,14 +38,3 @@ def test_public_config_only_exposes_safe_fields(monkeypatch):
     assert response.json()["config"]["llm_model"] == "glm-4-flash"
     assert "top-secret" not in response.text
     assert "another-secret" not in response.text
-
-
-def test_shared_password_protects_page_and_api(monkeypatch):
-    monkeypatch.setenv("SHARE_USERNAME", "friend")
-    monkeypatch.setenv("SHARE_PASSWORD", "long-secret")
-    client = TestClient(webapp.app)
-    for path in ("/", "/api/config", "/docs"):
-        assert client.get(path).status_code == 401
-        assert client.get(path, auth=("friend", "wrong")).status_code == 401
-    response = client.get("/docs", auth=("friend", "long-secret"))
-    assert response.status_code == 200

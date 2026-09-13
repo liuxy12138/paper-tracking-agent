@@ -1,10 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import base64
-import binascii
-import hmac
-import os
 import json
 import shutil
 import uuid
@@ -17,7 +13,7 @@ from urllib.request import Request as UrlRequest
 from urllib.request import urlopen
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import HTMLResponse, JSONResponse, Response, StreamingResponse
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -42,31 +38,6 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
-@app.middleware("http")
-async def shared_access_password(request: Request, call_next):
-    username = os.getenv("SHARE_USERNAME", "")
-    password = os.getenv("SHARE_PASSWORD", "")
-    if not username and not password:
-        return await call_next(request)
-    if not username or not password:
-        return JSONResponse({"ok": False, "error": "Share credentials are incomplete"}, status_code=503)
-
-    authorization = request.headers.get("Authorization", "")
-    supplied_user, supplied_password = "", ""
-    if authorization.startswith("Basic "):
-        try:
-            decoded = base64.b64decode(authorization[6:], validate=True).decode("utf-8")
-            supplied_user, _, supplied_password = decoded.partition(":")
-        except (binascii.Error, UnicodeDecodeError):
-            pass
-    if not (
-        hmac.compare_digest(supplied_user, username)
-        and hmac.compare_digest(supplied_password, password)
-    ):
-        return Response(status_code=401, headers={"WWW-Authenticate": 'Basic realm="Research Agent"'})
-    return await call_next(request)
-
-
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 

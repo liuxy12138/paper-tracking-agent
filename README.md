@@ -40,10 +40,6 @@ evals/
 docs/
 ```
 
-## 不买域名：用自己的 Windows 电脑分享
-
-按 [家庭电脑免费分享步骤](agent1/deploy/home-windows.md)运行，可取得 `https://…ts.net/` 的链接。该方式保留 SSE 流式接口，并需要访问密码。
-
 ## 给别人使用（公网 HTTPS）
 
 公网部署配置和步骤见 [agent1/deploy/README.md](agent1/deploy/README.md)。部署后分享 `https://你的域名/` 与访问凭据；本地的 `http://127.0.0.1:8000/` 只能供本机访问。
