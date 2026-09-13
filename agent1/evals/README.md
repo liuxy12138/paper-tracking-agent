@@ -29,4 +29,4 @@ python evals/run_eval.py --ingest-documents
 python evals/run_retrieval_ablation.py
 ```
 
-当前评测集包含 30 题、4 份本地示例资料。执行三模式对照实验需要可用的 Milvus、BGE 模型、GLM 凭据和可选 Redis/MySQL；--dry-run 仅校验评测输入，不产生引用准确率。0.44→0.49 属于待复现的目标对照结果，本仓库不将其标为当前实测。
+当前评测集包含 100 题，其中 75 题为跨文档问题、4 份本地示例资料。执行三模式对照实验需要可用的 Milvus、BGE 模型、GLM 凭据和可选 Redis/MySQL；--dry-run 仅校验评测输入，不产生引用准确率。0.44→0.49 属于待复现的目标对照结果，本仓库不将其标为当前实测。

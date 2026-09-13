@@ -40,6 +40,33 @@ evals/
 docs/
 ```
 
+## 本地启动（Windows PowerShell）
+
+从仓库根目录执行：
+
+```powershell
+cd agent1
+python -m pip install -r requirements.txt
+Copy-Item agent_config.example.json agent_config.json
+$env:ZHIPU_API_KEY = "你的智谱 API Key"
+```
+
+先打开 Docker Desktop，然后在同一目录启动 Milvus 和 Redis：
+
+```powershell
+.\standalone.bat start
+docker run -d --name research-redis -p 6379:6379 redis:7
+```
+
+Redis 容器已创建时改用 `docker start research-redis`。示例配置的 `database.enabled=false`，无需 MySQL；若设为 `true`，需先准备 MySQL 并设置 `DATABASE_URL`。确认 Milvus 可连后执行：
+
+```powershell
+python agent_main.py check-milvus
+python -m uvicorn competitive_research_agent.webapp:app --host 127.0.0.1 --port 8000
+```
+
+浏览器打开 http://127.0.0.1:8000/；接口文档在 http://127.0.0.1:8000/docs。首次启动会下载 BGE 模型。真实问答需导入文档并设置有效的智谱 API Key，届时会产生 GLM Token 用量。
+
 ## 使用
 
 安装依赖：
@@ -119,6 +146,9 @@ python agent_main.py rebuild-index
 ```
 
 ## 评测
+
+评测文件位于 `agent1/evals/questions.jsonl`，包含 100 题，其中 75 题要求跨文档回答。四份资料是本地合成样例，用于回归验证，不能代表真实行业测评。单元测试和 `--dry-run` 不调用 GLM，也不会产生 API Token 费用；完整评测会调用模型。
+
 
 ```bash
 python evals/run_eval.py --dry-run

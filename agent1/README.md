@@ -118,6 +118,9 @@ python agent_main.py rebuild-index
 
 ## 评测
 
+当前题集为 100 题；运行真实评测前需启动 Milvus、Redis，并配置有效的智谱 API Key。
+
+
 ```bash
 python evals/run_eval.py --dry-run
 python evals/run_eval.py --ingest-documents
