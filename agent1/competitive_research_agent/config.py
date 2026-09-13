@@ -263,25 +263,5 @@ def load_config(config_path: Optional[str] = None) -> AgentConfig:
         config.rag.milvus_token = cloud_token
         config.memory.milvus_token = cloud_token
 
-    milvus_uri = os.getenv("MILVUS_URI", "").strip()
-    if milvus_uri:
-        config.rag.milvus_uri = milvus_uri
-        config.memory.milvus_uri = milvus_uri
-
-    milvus_token = os.getenv("MILVUS_TOKEN", "").strip()
-    if milvus_token:
-        config.rag.milvus_token = milvus_token
-        config.memory.milvus_token = milvus_token
-
-    redis_url = os.getenv("REDIS_URL", "").strip()
-    if redis_url:
-        config.memory.redis_url = redis_url
-
-    database_enabled = os.getenv("DATABASE_ENABLED", "").strip().lower()
-    if database_enabled in {"true", "1", "yes"}:
-        config.database.enabled = True
-    elif database_enabled in {"false", "0", "no"}:
-        config.database.enabled = False
-
     config.paths.ensure_directories()
     return config

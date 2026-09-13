@@ -40,10 +40,6 @@ evals/
 docs/
 ```
 
-## 给别人使用（公网 HTTPS）
-
-公网部署配置和步骤见 [agent1/deploy/README.md](agent1/deploy/README.md)。部署后分享 `https://你的域名/` 与访问凭据；本地的 `http://127.0.0.1:8000/` 只能供本机访问。
-
 ## 本地启动（Windows PowerShell）
 
 从仓库根目录执行：
