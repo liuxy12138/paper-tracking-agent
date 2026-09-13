@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import shutil
+import uuid
 from contextlib import asynccontextmanager
 from functools import lru_cache
 from pathlib import Path
@@ -78,8 +79,8 @@ async def index(request: Request) -> HTMLResponse:
         {
             "project_name": "Industry Competitive Research Agent",
             "topic": config.topic,
-            "default_thread_id": config.graph.default_thread_id,
-            "default_user_id": config.graph.default_user_id,
+            "default_thread_id": uuid.uuid4().hex,
+            "default_user_id": uuid.uuid4().hex,
         },
     )
 
@@ -97,7 +98,17 @@ async def health() -> dict[str, Any]:
 
 @app.get("/api/config")
 async def config_view() -> dict[str, Any]:
-    return {"ok": True, "config": get_agent().config.to_dict()}
+    config = get_agent().config
+    return {
+        "ok": True,
+        "config": {
+            "topic": config.topic,
+            "llm_model": config.rag.llm_model,
+            "embedding_model": config.rag.embedding_model,
+            "reranker_model": config.rag.reranker_model,
+            "collection_name": config.rag.collection_name,
+        },
+    }
 
 
 @app.get("/api/graph")
@@ -225,7 +236,7 @@ async def ingest_upload(
     agent = get_agent()
     upload_dir = Path(agent.config.paths.base_dir) / "uploads"
     upload_dir.mkdir(parents=True, exist_ok=True)
-    target_path = upload_dir / file.filename
+    target_path = upload_dir / f"{uuid.uuid4().hex}.pdf"
 
     with target_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
@@ -254,7 +265,7 @@ async def ingest_url(payload: dict[str, Any]) -> dict[str, Any]:
     agent = get_agent()
     upload_dir = Path(agent.config.paths.base_dir) / "uploads"
     upload_dir.mkdir(parents=True, exist_ok=True)
-    target_path = upload_dir / _safe_pdf_filename(url)
+    target_path = upload_dir / f"{uuid.uuid4().hex}_{_safe_pdf_filename(url)}"
     await asyncio.to_thread(_download_pdf, url, target_path)
 
     document_id = str(payload.get("document_id") or "").strip()
@@ -277,4 +288,4 @@ async def http_exception_handler(_: Request, exc: HTTPException) -> JSONResponse
 
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(_: Request, exc: Exception) -> JSONResponse:
-    return _json_error(f"Unhandled server error: {exc}", status_code=500)
+    return _json_error("Internal server error", status_code=500)
